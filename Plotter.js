@@ -29,6 +29,7 @@ ctx.moveTo(width, height - height/10);
 ctx.lineTo(width-0.01*width, height - height/10 + height*0.02);
 ctx.stroke();
 
+
 function PlotPoints() {
 ctx.fillStyle = "black";
 ctx.clearRect(0 , 0, width, height);
@@ -114,6 +115,43 @@ for(var i = 0; i<xValues.length; i++){
     ctx.fill();
 }
 }
+
+
+var AQ = 0;
+function QuadradicEquation(){
+		console.log("Success");
+        var L = 0.0001;
+        var Tries = 1000000;
+        var YPred = 0;
+        var A = 0;
+        var B = 0;
+        var C = 0;
+        var Da = 0;
+        var Db = 0;
+        var Dc = 0;
+        for (var i = 0; i < Tries; i++) {
+            Da = 0;
+            Db = 0;
+            Dc = 0;
+            for (var z = 0; z < xValues.length; z++) {
+                YPred = A * xValues[z] * xValues[z] + B * xValues[z] + C;
+                Da = Da + (yValues[z] - YPred) * a[z] * a[z];
+                Db = Db + (yValues[z] - YPred) * a[z];
+                Dc = Dc + (yValues[z] - YPred);
+            }
+            Da = Da * (-2.0 / xValues.length);
+            Db = Db * (-2.0 / xValues.length);
+            Dc = Dc * (-2.0 / xValues.length);
+            A = A - L * Da;
+            B = B - L * Db;
+            C = C - L * Dc;
+
+     
+    }
+        AQ = A;
+}
+
+
 
 
 
