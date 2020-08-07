@@ -116,9 +116,20 @@ for(var i = 0; i<xValues.length; i++){
 }
 }
 
+function wait(ms)
+{
+    var d = new Date();
+    var d2 = null;
+    do { d2 = new Date(); }
+    while(d2-d < ms);
+}
 
-var AQ = 0;
-function QuadradicEquation(){
+// Draws a Quadratic Equation : 
+
+var ADraw = 0;
+var BDraw = 0;
+var CDraw = 0;
+function QuadradicEquation() {
 		console.log("Success");
         var L = 0.0001;
         var Tries = 1000000;
@@ -129,14 +140,24 @@ function QuadradicEquation(){
         var Da = 0;
         var Db = 0;
         var Dc = 0;
+        var Maximum = (17*Xmax/16 - Xmin/16);
+        var Minimum = (19*Xmin/16 - 3*Xmax/16);
         for (var i = 0; i < Tries; i++) {
-            Da = 0;
+        /*if(i%1000 == 0){
+        ctx.beginPath();
+        ctx.moveTo(0, height*(0.95 - ((A*i*i+B*i+C-Ymin)*0.9)/(Ymax-Ymin)));
+        for(var j = Minimum; j <= Maximum; j = j + 0.001){
+		ctx.lineTo(width*(0.15+0.8*((j-Xmin)/(Xmax-Xmin))), height*(0.95-0.9*((A*j*j+B*j+C-Ymin)/(Ymax-Ymin))));
+		}
+		ctx.stroke();
+           }*/
+           	Da = 0;
             Db = 0;
             Dc = 0;
             for (var z = 0; z < xValues.length; z++) {
                 YPred = A * xValues[z] * xValues[z] + B * xValues[z] + C;
-                Da = Da + (yValues[z] - YPred) * a[z] * a[z];
-                Db = Db + (yValues[z] - YPred) * a[z];
+                Da = Da + (yValues[z] - YPred) * xValues[z] * xValues[z];
+                Db = Db + (yValues[z] - YPred) * xValues[z];
                 Dc = Dc + (yValues[z] - YPred);
             }
             Da = Da * (-2.0 / xValues.length);
@@ -148,7 +169,17 @@ function QuadradicEquation(){
 
      
     }
-        AQ = A;
+
+        ADraw = A;
+        BDraw = B;
+        CDraw = C;
+        // Draw
+        ctx.beginPath();
+        ctx.moveTo(0, height*(0.95 - ((A*i*i+B*i+C-Ymin)*0.9)/(Ymax-Ymin)));
+        for(var i = Minimum; i <= Maximum; i = i + 0.001){
+		ctx.lineTo(width*(0.15+0.8*((i-Xmin)/(Xmax-Xmin))), height*(0.95-0.9*((A*i*i+B*i+C-Ymin)/(Ymax-Ymin))));
+}
+		ctx.stroke();
 }
 
 
