@@ -30,29 +30,8 @@ ctx.moveTo(width, height - height/10);
 ctx.lineTo(width-0.01*width, height - height/10 + height*0.02);
 ctx.stroke();
 
-
 //Reading the input values, scaling the graph and drawing the points
 function PlotPoints() {
-ctx.fillStyle = "black";
-ctx.clearRect(0 , 0, width, height);
-
-// Drawing the y axis
-ctx.beginPath();
-ctx.moveTo(width/10, height);
-ctx.lineTo(width/10, 0);
-ctx.lineTo(width/10-width/100, height*0.02);
-ctx.moveTo(width/10, 0);
-ctx.lineTo(width/10+width/100, height*0.02);
-ctx.stroke();
-
-//Drawing the x axis
-ctx.beginPath();
-ctx.moveTo(0, height - height/10);
-ctx.lineTo(width, height - height/10);
-ctx.lineTo(width-0.01*width, height - height/10 - height*0.02);
-ctx.moveTo(width, height - height/10);
-ctx.lineTo(width-0.01*width, height - height/10 + height*0.02);
-ctx.stroke();
 
 //Initializing variables
 xValues = [];
@@ -92,32 +71,8 @@ if(counter>=1 && yValues[i]<Ymin){
 Ymin = yValues[i];
 }
 }
+RedrawCanvas();
 
-//Coordinates for the axes 
-ctx.font = "20px Arial";
-// Y
-for(var i = 0; i<10; i++){
-	ctx.beginPath();
-	ctx.moveTo(0.08*width, (0.05+i/10)*height);
-	ctx.lineTo(0.12*width, (0.05+i/10)*height);
-	ctx.stroke();
-	ctx.fillText((Ymax-((Ymax-Ymin)/9)*i).toFixed(2), 0.01*width, (0.06+i/10)*height);
-}
-// X 
-for(var i = 0; i<9; i++){
-	ctx.beginPath();
-	ctx.moveTo((0.15+i/10)*width, 0.88*height);
-	ctx.lineTo((0.15+i/10)*width, 0.92*height);
-	ctx.stroke();
-	ctx.fillText((Xmin+((Xmax-Xmin)/8)*i).toFixed(2), (0.13+i/10)*width, 0.98*height);
-}
-// Drawing the points
-ctx.fillStyle = "red";
-for(var i = 0; i<xValues.length; i++){
-    ctx.beginPath();
-    ctx.arc(((xValues[i]-Xmin)/(Xmax-Xmin)*0.8+0.15)*width, height - height*(0.05+((yValues[i]-Ymin)/(Ymax-Ymin)*0.9)), 3, 0, Math.PI * 2, true);
-    ctx.fill();
-}
 }
 
 // Pause function for animations
@@ -130,9 +85,9 @@ function wait(ms)
 }
 
 
-// Draws a Quadratic Equation : 
-function QuadradicEquation() {
 
+// Redraws the canvas : 
+function RedrawCanvas() {
 	ctx.fillStyle = "black";
 	ctx.clearRect(0 , 0, width, height);
 	// Drawing the y axis
@@ -180,10 +135,41 @@ function QuadradicEquation() {
     ctx.arc(((xValues[i]-Xmin)/(Xmax-Xmin)*0.8+0.15)*width, height - height*(0.05+((yValues[i]-Ymin)/(Ymax-Ymin)*0.9)), 3, 0, Math.PI * 2, true);
     ctx.fill();}
 	ctx.fillStyle = "black";
+}
+
+function ReadLT(lossfunction, tries){
+
+	   if(document.getElementById("LossFunction").value !== ""){
+        var L = parseFloat(document.getElementById("LossFunction").value);
+        console.log("Loss function: "+L);
+    }
+        if(document.getElementById("LossFunction").value == ""){
+        var L = lossfunction;
+        console.log("Loss function: "+L);
+    }
+
+        if(document.getElementById("Tries").value !== ""){
+        var Tries = parseFloat(document.getElementById("Tries").value);
+        console.log("Tries: " + Tries);
+    }
+        if(document.getElementById("Tries").value == ""){
+        var Tries = tries;
+        console.log("Tries: " + Tries);
+    }
+    LT = [L, Tries];
+    return(LT);
+}
 
 
-        var L = 0.0003;
-        var Tries = 2000000;
+// Draws a Quadratic Equation : 
+function QuadradicEquation() {
+
+	RedrawCanvas();
+
+	var LT = ReadLT(0.0003, 2000000);
+	var L = LT[0];
+	var Tries = LT[1];
+	
         var YPred = 0;
         var A = 0;
         var B = 0;
@@ -195,15 +181,16 @@ function QuadradicEquation() {
         var Minimum = (19*Xmin/16 - 3*Xmax/16);
         for (var i = 0; i < Tries; i++) {
 
-        //For animation later on: 	
+        //For animation: 	
         /*if(i%1000 == 0){
-        ctx.beginPath();
-        ctx.moveTo(0, height*(0.95 - ((A*i*i+B*i+C-Ymin)*0.9)/(Ymax-Ymin)));
-        for(var j = Minimum; j <= Maximum; j = j + 0.001){
-		ctx.lineTo(width*(0.15+0.8*((j-Xmin)/(Xmax-Xmin))), height*(0.95-0.9*((A*j*j+B*j+C-Ymin)/(Ymax-Ymin))));
-		}
+     	ctx.beginPath();
+    	ctx.moveTo(0, height*(0.95 - ((A*Minimum*Minimum+B*Minimum+C-Ymin)*0.9)/(Ymax-Ymin)));
+   		for(var e = Minimum; e <= Maximum; e = e + 0.001){
+		ctx.lineTo(width*(0.15+0.8*((e-Xmin)/(Xmax-Xmin))), height*(0.95-0.9*((A*e*e+B*e+C-Ymin)/(Ymax-Ymin))));}
 		ctx.stroke();
+		wait(1);
         }*/
+
 
            	Da = 0;
             Db = 0;
@@ -230,77 +217,91 @@ function QuadradicEquation() {
 
 
     // Drawing the function
+
     ctx.beginPath();
-    ctx.moveTo(0, height*(0.95 - ((A*i*i+B*i+C-Ymin)*0.9)/(Ymax-Ymin)));
-    for(var i = Minimum; i <= Maximum; i = i + 0.001){
-	ctx.lineTo(width*(0.15+0.8*((i-Xmin)/(Xmax-Xmin))), height*(0.95-0.9*((A*i*i+B*i+C-Ymin)/(Ymax-Ymin))));}
+    ctx.moveTo(0, height*(0.95 - ((A*Minimum*Minimum+B*Minimum+C-Ymin)*0.9)/(Ymax-Ymin)));
+    for(var e = Minimum; e <= Maximum; e = e + 0.001){
+	ctx.lineTo(width*(0.15+0.8*((e-Xmin)/(Xmax-Xmin))), height*(0.95-0.9*((A*e*e+B*e+C-Ymin)/(Ymax-Ymin))));}
 	ctx.stroke();
 }
 
 
+var myVar;
+function QuadradicEquationAnimated() {
+    clearInterval(myVar);
+	RedrawCanvas();
+	var LT = ReadLT(0.0003, 2000000);
+	var L = LT[0];
+	var Tries = LT[1];
+    A = 0;
+    B = 0; 
+    C = 0;
+    myVar = window.setInterval(performGradientQE, 4);
+    r = 0;
+}
+var A = 0;
+var B = 0;
+var C = 0;
+var r = 0;
+function myStopFunction() {
+    clearInterval(myVar);
+}
+function performGradientQE(){
+    r++;
+    if(r>=1500){
+    myStopFunction();
+    RedrawCanvas();
+    ctx.beginPath();
+    ctx.moveTo(0, height*(0.95 - ((A*Minimum*Minimum+B*Minimum+C-Ymin)*0.9)/(Ymax-Ymin)));
+    for(var e = Minimum; e <= Maximum; e = e + 0.001){
+    ctx.lineTo(width*(0.15+0.8*((e-Xmin)/(Xmax-Xmin))), height*(0.95-0.9*((A*e*e+B*e+C-Ymin)/(Ymax-Ymin))));}
+    ctx.stroke();
+    }
+    console.log(r);
+    var L = 0.0003;
+    var Tries = 1000;
+    var YPred = 0;
+    var Da = 0;
+    var Db = 0;
+    var Dc = 0;
+    var Maximum = (17*Xmax/16 - Xmin/16);
+    var Minimum = (19*Xmin/16 - 3*Xmax/16);
+    for (var i = 0; i < Tries; i++) {
 
+           	Da = 0;
+            Db = 0;
+            Dc = 0;
+            for (var z = 0; z < xValues.length; z++) {
+                YPred = A * xValues[z] * xValues[z] + B * xValues[z] + C;
+                Da = Da + (yValues[z] - YPred) * xValues[z] * xValues[z];
+                Db = Db + (yValues[z] - YPred) * xValues[z];
+                Dc = Dc + (yValues[z] - YPred);
+            }
+            Da = Da * (-2.0 / xValues.length);
+            Db = Db * (-2.0 / xValues.length);
+            Dc = Dc * (-2.0 / xValues.length);
+            A = A - L * Da;
+            B = B - L * Db;
+            C = C - L * Dc;
 
-
+     
+    }
+   /* RedrawCanvas(); */
+    ctx.beginPath();
+    ctx.moveTo(0, height*(0.95 - ((A*Minimum*Minimum+B*Minimum+C-Ymin)*0.9)/(Ymax-Ymin)));
+    for(var e = Minimum; e <= Maximum; e = e + 0.001){
+	ctx.lineTo(width*(0.15+0.8*((e-Xmin)/(Xmax-Xmin))), height*(0.95-0.9*((A*e*e+B*e+C-Ymin)/(Ymax-Ymin))));}
+	ctx.stroke();
+}
 
 
 function CubicEquation() {
 
+		RedrawCanvas();
+		var LT = ReadLT(0.0001, 2000000);
+		var L = LT[0];
+		var Tries = LT[1];
 
-	//Reseting the canvas 
-	ctx.fillStyle = "black";
-	ctx.clearRect(0 , 0, width, height);
-
-	// Drawing the y axis
-	ctx.beginPath();
-	ctx.moveTo(width/10, height);
-	ctx.lineTo(width/10, 0);
-	ctx.lineTo(width/10-width/100, height*0.02);
-	ctx.moveTo(width/10, 0);
-	ctx.lineTo(width/10+width/100, height*0.02);
-	ctx.stroke();
-
-
-	//Drawing the x axis
-	ctx.beginPath();
-	ctx.moveTo(0, height - height/10);
-	ctx.lineTo(width, height - height/10);
-	ctx.lineTo(width-0.01*width, height - height/10 - height*0.02);
-	ctx.moveTo(width, height - height/10);
-	ctx.lineTo(width-0.01*width, height - height/10 + height*0.02);
-	ctx.stroke();
-
-	//Coordinates for the axes 
-	ctx.font = "20px Arial";
-
-	// Y
-	for(var i = 0; i<10; i++){
-	ctx.beginPath();
-	ctx.moveTo(0.08*width, (0.05+i/10)*height);
-	ctx.lineTo(0.12*width, (0.05+i/10)*height);
-	ctx.stroke();
-	ctx.fillText((Ymax-((Ymax-Ymin)/9)*i).toFixed(2), 0.01*width, (0.06+i/10)*height);}
-
-	// X 
-	for(var i = 0; i<9; i++){
-	ctx.beginPath();
-	ctx.moveTo((0.15+i/10)*width, 0.88*height);
-	ctx.lineTo((0.15+i/10)*width, 0.92*height);
-	ctx.stroke();
-	ctx.fillText((Xmin+((Xmax-Xmin)/8)*i).toFixed(2), (0.13+i/10)*width, 0.98*height);}
-
-	// Drawing the points
-	ctx.fillStyle = "red";
-	for(var i = 0; i<xValues.length; i++){
-    ctx.beginPath();
-    ctx.arc(((xValues[i]-Xmin)/(Xmax-Xmin)*0.8+0.15)*width, height - height*(0.05+((yValues[i]-Ymin)/(Ymax-Ymin)*0.9)), 3, 0, Math.PI * 2, true);
-    ctx.fill();
-	}
-
-	// Changing the pen color back
-	ctx.fillStyle = "black";
-
-		var L = 0.0001;
-        var Tries = 30000000;
         var YPred = 0;
         var A = 0;
         var B = 0;
@@ -358,6 +359,110 @@ console.log("D = "+D);
 }
 
 
+function LinearEquation(){
+		
+		RedrawCanvas();
 
+		var LT = ReadLT(0.0001, 1000000);
+		var L = LT[0];
+		var Tries = LT[1];
+
+        var YPred = 0;
+        var A = 0;
+        var B = 0;
+        var Da = 0;
+        var Db = 0;
+        var Maximum = (17*Xmax/16 - Xmin/16);
+        var Minimum = (19*Xmin/16 - 3*Xmax/16);
+        for (var i = 0; i < Tries; i++) {
+            Da = 0;
+            Db = 0;
+            for (var z = 0; z < xValues.length; z++) {
+                YPred = A * xValues[z] + B;
+                Da = Da + (yValues[z] - YPred) * xValues[z];
+                Db = Db + (yValues[z] - YPred);
+            }
+           
+            Da = Da * (-2.0 / xValues.length);
+            Db = Db * (-2.0 / xValues.length);
+
+            /*if(i%1000 == 0){
+            	console.log(YPred);
+            }*/
+
+            A = A - L * Da;
+            B = B - L * Db;
+
+
+        }
+console.log("Successfully calculated the best linear equation for these coordinates: ");
+console.log("A = "+A);
+console.log("B = "+B);
+
+        // Drawing the function
+        ctx.beginPath();
+        ctx.moveTo(0, height*(0.95 - ((A*Minimum+B-Ymin)*0.9)/(Ymax-Ymin)));
+        for(var e = Minimum; e <= Maximum; e = e + 0.001){
+		ctx.lineTo(width*(0.15+0.8*((e-Xmin)/(Xmax-Xmin))), height*(0.95-0.9*((A*e+B-Ymin)/(Ymax-Ymin))));
+}
+		ctx.stroke();
+
+}
+
+function ExponentialEquation(){
+
+		RedrawCanvas();
+		var LT = ReadLT(0.00000001, 10000000);
+		var L = LT[0];
+		var Tries = LT[1];
+		
+        var YPred = 0;
+        var A = 0;
+        var B = 0;
+        var C = 0;
+        var Da = 0;
+        var Db = 0;
+        var Dc = 0;
+        var Maximum = (17*Xmax/16 - Xmin/16);
+        var Minimum = (19*Xmin/16 - 3*Xmax/16);
+        for (var i = 0; i < Tries; i++) {
+            Da = 0;
+            Db = 0;
+            Dc = 0;
+            for (var z = 0; z < xValues.length; z++) {
+                YPred = A * Math.exp(xValues[z]*B) + C;
+                Da = Da + (yValues[z] - YPred)*Math.exp(xValues[z]*B);
+                Db = Db + (yValues[z] - YPred)*A*xValues[z]*Math.exp(xValues[z]*B);
+                Dc = Dc + (yValues[z] - YPred);
+            }
+           
+            Da = Da * (-2.0 / xValues.length);
+            Db = Db * (-2.0 / xValues.length);
+            Dc = Dc * (-2.0 / xValues.length);
+
+            /*if(i%1000 == 0){
+            	console.log(YPred);
+            }*/
+
+            A = A - L * Da;
+            B = B - L * Db;
+            C = C - L * Dc;
+
+
+        }
+		console.log("Successfully calculated the best exponential equation for these coordinates: ");
+		console.log("A = "+A);
+		console.log("B = "+B);
+		console.log("C = "+C);
+
+        // Drawing the function
+        ctx.beginPath();
+        ctx.moveTo(0, height*(0.95 - ((A*Math.exp(Minimum*B)+C-Ymin)*0.9)/(Ymax-Ymin)));
+        for(var e = Minimum; e <= Maximum; e = e + 0.001){
+		ctx.lineTo(width*(0.15+0.8*((e-Xmin)/(Xmax-Xmin))), height*(0.95-0.9*((A*Math.exp(e*B)+C-Ymin)/(Ymax-Ymin))));
+}
+		ctx.stroke();
+
+}
 
 
