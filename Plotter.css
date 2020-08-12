@@ -115,3 +115,20 @@ html{}
 	position: absolute;
 	top: 730px;
 }
+
+
+/* Placement of constants */
+.Constants{
+	list-style-type: none;
+	position: absolute;
+	left: calc(84vw - 15px);
+	top: 350px;
+	width: 15vw;
+	font-size: 30px;
+}
+.Constantlistitem{
+margin-top: 20px;
+}
+.hide{
+	display: none;
+}

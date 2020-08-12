@@ -30,9 +30,22 @@ ctx.moveTo(width, height - height/10);
 ctx.lineTo(width-0.01*width, height - height/10 + height*0.02);
 ctx.stroke();
 
+
+
+function HideConstants(){
+    element = document.getElementById("FirstConstant");
+    element.classList.add("hide");
+    element = document.getElementById("SecondConstant");
+    element.classList.add("hide");
+    element = document.getElementById("ThirdConstant");
+    element.classList.add("hide");
+    element = document.getElementById("FourthConstant");
+    element.classList.add("hide");
+}
 //Reading the input values, scaling the graph and drawing the points
 function PlotPoints() {
 
+HideConstants();
 //Initializing variables
 xValues = [];
 yValues = [];
@@ -160,9 +173,10 @@ function ReadLT(lossfunction, tries){
     return(LT);
 }
 
-
+var element;
 // Draws a Quadratic Equation : 
 function QuadradicEquation() {
+    HideConstants();
 
 	RedrawCanvas();
 
@@ -180,17 +194,6 @@ function QuadradicEquation() {
         var Maximum = (17*Xmax/16 - Xmin/16);
         var Minimum = (19*Xmin/16 - 3*Xmax/16);
         for (var i = 0; i < Tries; i++) {
-
-        //For animation: 	
-        /*if(i%1000 == 0){
-     	ctx.beginPath();
-    	ctx.moveTo(0, height*(0.95 - ((A*Minimum*Minimum+B*Minimum+C-Ymin)*0.9)/(Ymax-Ymin)));
-   		for(var e = Minimum; e <= Maximum; e = e + 0.001){
-		ctx.lineTo(width*(0.15+0.8*((e-Xmin)/(Xmax-Xmin))), height*(0.95-0.9*((A*e*e+B*e+C-Ymin)/(Ymax-Ymin))));}
-		ctx.stroke();
-		wait(1);
-        }*/
-
 
            	Da = 0;
             Db = 0;
@@ -214,6 +217,17 @@ function QuadradicEquation() {
 	console.log("A = "+A);
 	console.log("B = "+B);
 	console.log("C = "+C);
+    element = document.getElementById("FirstConstant");
+    element.classList.remove("hide");
+    element = document.getElementById("SecondConstant");
+    element.classList.remove("hide");
+    element = document.getElementById("ThirdConstant");
+    element.classList.remove("hide");
+
+
+    document.getElementById("FirstConstant").innerHTML = "A = " + A.toFixed(3);
+    document.getElementById("SecondConstant").innerHTML = "B = " + B.toFixed(3);
+    document.getElementById("ThirdConstant").innerHTML = "C = " + C.toFixed(3);
 
 
     // Drawing the function
@@ -226,9 +240,12 @@ function QuadradicEquation() {
 }
 
 
+
+// Animated QuadraticEquation :
 var myVar;
 function QuadradicEquationAnimated() {
     clearInterval(myVar);
+    HideConstants();
 	RedrawCanvas();
 	var LT = ReadLT(0.0003, 2000000);
 	var L = LT[0];
@@ -239,6 +256,7 @@ function QuadradicEquationAnimated() {
     myVar = window.setInterval(performGradientQE, 4);
     r = 0;
 }
+HideConstants();
 var A = 0;
 var B = 0;
 var C = 0;
@@ -284,8 +302,19 @@ function performGradientQE(){
             B = B - L * Db;
             C = C - L * Dc;
 
-     
     }
+    element = document.getElementById("FirstConstant");
+    element.classList.remove("hide");
+    element = document.getElementById("SecondConstant");
+    element.classList.remove("hide");
+    element = document.getElementById("ThirdConstant");
+    element.classList.remove("hide");
+
+
+    document.getElementById("FirstConstant").innerHTML = "A = " + A.toFixed(3);
+    document.getElementById("SecondConstant").innerHTML = "B = " + B.toFixed(3);
+    document.getElementById("ThirdConstant").innerHTML = "C = " + C.toFixed(3);
+
    /* RedrawCanvas(); */
     ctx.beginPath();
     ctx.moveTo(0, height*(0.95 - ((A*Minimum*Minimum+B*Minimum+C-Ymin)*0.9)/(Ymax-Ymin)));
@@ -295,8 +324,10 @@ function performGradientQE(){
 }
 
 
-function CubicEquation() {
 
+// Draws a Cubic equation : 
+function CubicEquation() {
+        HideConstants();
 		RedrawCanvas();
 		var LT = ReadLT(0.0001, 2000000);
 		var L = LT[0];
@@ -331,9 +362,7 @@ function CubicEquation() {
             Dc = Dc * (-2.0 / xValues.length);
             Dd = Dd * (-2.0 / xValues.length);
             
-            /*if(i%1000 == 0){
-            	console.log(YPred);
-            }*/
+
             A = A - L * Da;
             B = B - L * Db;
             C = C - L * Dc;
@@ -341,13 +370,28 @@ function CubicEquation() {
 
 
         }
+
 console.log("Successfully calculated the best cubic equation for these coordinates: ");
 console.log("A = "+A);
 console.log("B = "+B);
 console.log("C = "+C);
 console.log("D = "+D);
 
+    element = document.getElementById("FirstConstant");
+    element.classList.remove("hide");
+    element = document.getElementById("SecondConstant");
+    element.classList.remove("hide");
+    element = document.getElementById("ThirdConstant");
+    element.classList.remove("hide");
+    element = document.getElementById("FourthConstant");
+    element.classList.remove("hide");
 
+
+
+    document.getElementById("FirstConstant").innerHTML = "A = " + A.toFixed(3);
+    document.getElementById("SecondConstant").innerHTML = "B = " + B.toFixed(3);
+    document.getElementById("ThirdConstant").innerHTML = "C = " + C.toFixed(3);
+    document.getElementById("FourthConstant").innerHTML = "D = " + D.toFixed(3);
         // Drawing the function
         ctx.beginPath();
         ctx.moveTo(0, height*(0.95 - ((A*Minimum*Minimum*Minimum+B*Minimum*Minimum+C*Minimum+D-Ymin)*0.9)/(Ymax-Ymin)));
@@ -360,7 +404,7 @@ console.log("D = "+D);
 
 
 function LinearEquation(){
-		
+		HideConstants();
 		RedrawCanvas();
 
 		var LT = ReadLT(0.0001, 1000000);
@@ -398,6 +442,16 @@ function LinearEquation(){
 console.log("Successfully calculated the best linear equation for these coordinates: ");
 console.log("A = "+A);
 console.log("B = "+B);
+    element = document.getElementById("FirstConstant");
+    element.classList.remove("hide");
+    element = document.getElementById("SecondConstant");
+    element.classList.remove("hide");
+
+
+
+
+    document.getElementById("FirstConstant").innerHTML = "A = " + A.toFixed(3);
+    document.getElementById("SecondConstant").innerHTML = "B = " + B.toFixed(3);
 
         // Drawing the function
         ctx.beginPath();
@@ -410,7 +464,7 @@ console.log("B = "+B);
 }
 
 function ExponentialEquation(){
-
+        HideConstants();
 		RedrawCanvas();
 		var LT = ReadLT(0.00000001, 10000000);
 		var L = LT[0];
@@ -454,6 +508,20 @@ function ExponentialEquation(){
 		console.log("A = "+A);
 		console.log("B = "+B);
 		console.log("C = "+C);
+    element = document.getElementById("FirstConstant");
+    element.classList.remove("hide");
+    element = document.getElementById("SecondConstant");
+    element.classList.remove("hide");
+    element = document.getElementById("ThirdConstant");
+    element.classList.remove("hide");
+
+
+
+
+    document.getElementById("FirstConstant").innerHTML = "A = " + A.toFixed(3);
+    document.getElementById("SecondConstant").innerHTML = "B = " + B.toFixed(3);
+    document.getElementById("ThirdConstant").innerHTML = "C = " + C.toFixed(3);
+
 
         // Drawing the function
         ctx.beginPath();
