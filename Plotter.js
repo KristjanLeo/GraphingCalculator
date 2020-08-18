@@ -6,6 +6,8 @@ var Xmin = null;
 var Ymin = null;
 var xValues = [];
 var yValues = [];
+var xErrors = [];
+var yErrors = [];
 var canvas = document.getElementById('Plotter');
 var width = canvas.width;
 var height = canvas.height;
@@ -49,6 +51,8 @@ HideConstants();
 //Initializing variables
 xValues = [];
 yValues = [];
+xErrors = [];
+yErrors = [];
 Xmax = null;
 Ymax = null;
 Xmin = null;
@@ -59,7 +63,15 @@ var counter = 0;
 for(var i = 1; i<=15; i++){
 if(document.getElementById("X"+ i).value !== "" && document.getElementById("Y"+ i).value !== ""){
 xValues.push(parseFloat(document.getElementById("X" + i).value));
-yValues.push(parseFloat(document.getElementById("Y" + i).value));}}
+yValues.push(parseFloat(document.getElementById("Y" + i).value));
+if(document.getElementById("ErrorX"+i).value !== ""){
+	xErrors.push(parseFloat(document.getElementById("ErrorX" + i).value));
+}else{xErrors.push(0);}
+if(document.getElementById("ErrorY"+i).value !== ""){
+	yErrors.push(parseFloat(document.getElementById("ErrorY" + i).value));
+}else{yErrors.push(0);}
+}
+}
 
 
 //Finding the maxium and minimum x,y values to create the axes
@@ -141,12 +153,59 @@ function RedrawCanvas() {
 	ctx.stroke();
 	ctx.fillText((Xmin+((Xmax-Xmin)/8)*i).toFixed(2), (0.13+i/10)*width, 0.98*height);}
 
+
+
 	//Drawing the points 
 	ctx.fillStyle = "red";
 	for(var i = 0; i<xValues.length; i++){
     ctx.beginPath();
-    ctx.arc(((xValues[i]-Xmin)/(Xmax-Xmin)*0.8+0.15)*width, height - height*(0.05+((yValues[i]-Ymin)/(Ymax-Ymin)*0.9)), 3, 0, Math.PI * 2, true);
+    ctx.arc(((xValues[i]-Xmin)/(Xmax-Xmin)*0.8+0.15)*width, height - height*(0.05+((yValues[i]-Ymin)/(Ymax-Ymin)*0.9)), 4, 0, Math.PI * 2, true);
     ctx.fill();}
+	ctx.fillStyle = "black";
+
+
+	//Drawing the x - errors
+	for(var i = 0; i<xValues.length; i++){
+    if(xErrors[i] !== 0){
+
+
+    ctx.beginPath();
+    ctx.moveTo(((xValues[i]-xErrors[i]-Xmin)/(Xmax-Xmin)*0.8+0.15)*width, height - height*(0.05+((yValues[i]-Ymin)/(Ymax-Ymin)*0.9)));
+    ctx.lineTo(((xValues[i]+xErrors[i]-Xmin)/(Xmax-Xmin)*0.8+0.15)*width, height - height*(0.05+((yValues[i]-Ymin)/(Ymax-Ymin)*0.9)));
+  
+    ctx.moveTo(((xValues[i]-xErrors[i]-Xmin)/(Xmax-Xmin)*0.8+0.15)*width, height - height*(0.049 - (xErrors[i])/(Xmax-Xmin)*0.2 +((yValues[i]-Ymin)/(Ymax-Ymin)*0.9)));
+    ctx.lineTo(((xValues[i]-xErrors[i]-Xmin)/(Xmax-Xmin)*0.8+0.15)*width, height - height*(0.051 + (xErrors[i])/(Xmax-Xmin)*0.2 +((yValues[i]-Ymin)/(Ymax-Ymin)*0.9)));
+
+    ctx.moveTo(((xValues[i]+xErrors[i]-Xmin)/(Xmax-Xmin)*0.8+0.15)*width, height - height*(0.049 - (xErrors[i])/(Xmax-Xmin)*0.2 +((yValues[i]-Ymin)/(Ymax-Ymin)*0.9)));
+    ctx.lineTo(((xValues[i]+xErrors[i]-Xmin)/(Xmax-Xmin)*0.8+0.15)*width, height - height*(0.051 + (xErrors[i])/(Xmax-Xmin)*0.2 +((yValues[i]-Ymin)/(Ymax-Ymin)*0.9)));
+    ctx.stroke();
+
+}
+}
+	ctx.fillStyle = "black";
+
+	//Drawing the y - errors
+	for(var i = 0; i<xValues.length; i++){
+    if(yErrors[i] !== 0){
+
+
+
+
+    ctx.beginPath();
+    ctx.moveTo(((xValues[i]-Xmin)/(Xmax-Xmin)*0.8+0.15)*width, height - height*(0.05+((yValues[i]-yErrors[i]-Ymin)/(Ymax-Ymin)*0.9)));
+    ctx.lineTo(((xValues[i]-Xmin)/(Xmax-Xmin)*0.8+0.15)*width, height - height*(0.05+((yValues[i]+yErrors[i]-Ymin)/(Ymax-Ymin)*0.9)));
+
+    ctx.moveTo(((xValues[i]-Xmin)/(Xmax-Xmin)*0.8+0.149 - 0.2*((yErrors[i])/(Ymax-Ymin)))*width, height - height*(0.05+((yValues[i]-yErrors[i]-Ymin)/(Ymax-Ymin)*0.9)));
+    ctx.lineTo(((xValues[i]-Xmin)/(Xmax-Xmin)*0.8+0.151 + 0.2*((yErrors[i])/(Ymax-Ymin)))*width, height - height*(0.05+((yValues[i]-yErrors[i]-Ymin)/(Ymax-Ymin)*0.9)));
+
+    ctx.moveTo(((xValues[i]-Xmin)/(Xmax-Xmin)*0.8+0.149 - 0.2*((yErrors[i])/(Ymax-Ymin)))*width, height - height*(0.05+((yValues[i]+yErrors[i]-Ymin)/(Ymax-Ymin)*0.9)));
+    ctx.lineTo(((xValues[i]-Xmin)/(Xmax-Xmin)*0.8+0.151 + 0.2*((yErrors[i])/(Ymax-Ymin)))*width, height - height*(0.05+((yValues[i]+yErrors[i]-Ymin)/(Ymax-Ymin)*0.9)));
+    ctx.stroke();
+
+
+
+}
+}
 	ctx.fillStyle = "black";
 }
 

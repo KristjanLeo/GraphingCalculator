@@ -5,7 +5,7 @@
     display: block;
     position: absolute;
     top: 130px;
-    left: calc(16vw + 20px);
+    left: calc(20vw + 20px);
 }
 
 
@@ -13,13 +13,13 @@
 /* The inputs of x and y */
 .InputValues {
 	list-style-type: none;
-	max-width: 17vw;
+	max-width: 20vw;
 	position: absolute;
 	left: -20px;
 	top: 90px;
 }
 .InputXY {
-	max-width: 31%;
+	max-width: 20%;
 	text-align:center;
 }
 .InsertText {
@@ -37,9 +37,9 @@ input::-webkit-inner-spin-button {
 .PlotButtons {
 	list-style-type: none;
 	position: absolute;
-	left: calc(84vw - 15px);
+	left: calc(88vw - 15px);
 	top: 115px;
-	width: 15vw;
+	width: 11vw;
 }
 .PlotEquations:hover{
 	background-color: rgb(10, 170, 255);
@@ -47,7 +47,7 @@ input::-webkit-inner-spin-button {
 	padding-top: 10%;
 }
 .PlotEquations{
-	width: 14vw;
+	width: 11vw;
 	height: 50px;
 }
 
@@ -83,6 +83,7 @@ padding-top: 1%;
 body{
 		margin: 0px;
         padding-bottom: 400px;
+
     }
 
 head{}
@@ -121,10 +122,10 @@ html{}
 .Constants{
 	list-style-type: none;
 	position: absolute;
-	left: calc(84vw - 15px);
+	left: calc(88vw - 15px);
 	top: 350px;
-	width: 15vw;
-	font-size: 25px;
+	width: 11vw;
+	font-size: 20px;
 }
 .Constantlistitem{
 margin-top: 20px;
