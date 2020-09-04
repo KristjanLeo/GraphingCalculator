@@ -133,3 +133,12 @@ margin-top: 20px;
 .hide{
 	display: none;
 }
+
+#contact_info {
+position: absolute;
+top: 130%;
+}
+
+#SplitLine {
+	width: 100vw;
+}
