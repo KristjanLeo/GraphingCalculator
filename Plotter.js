@@ -239,7 +239,7 @@ function QuadradicEquation() {
 
 	RedrawCanvas();
 
-	var LT = ReadLT(0.0003, 2000000);
+	var LT = ReadLT(0.0003, 4500000);
 	var L = LT[0];
 	var Tries = LT[1];
 	
