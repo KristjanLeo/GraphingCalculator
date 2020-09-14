@@ -388,7 +388,7 @@ function performGradientQE(){
 function CubicEquation() {
         HideConstants();
 		RedrawCanvas();
-		var LT = ReadLT(0.0001, 2000000);
+		var LT = ReadLT(0.0001, 5000000);
 		var L = LT[0];
 		var Tries = LT[1];
 
